@@ -12,11 +12,13 @@ public class Grid {
     private final ArrayList<HashSet<Integer>> rowSets;
     private final ArrayList<HashSet<Integer>> columnSets;
     private final ArrayList<HashSet<Integer>> sectionSets;
+    private final int n;
 
     public Grid(int[][] sudoku, int n) {
 
-        // make sure that the arguments passed in are in compliance with valid sudoku format
-        if (n == 0 || sudoku.length == 0 || sudoku[0].length == 0 || sudoku.length != sudoku[0].length) {
+        // make sure that the arguments passed in are in compliance with valid sudoku format 4x4 9x9 or 16x16
+        if (!(n == 4 || n == 9 || n == 16) || sudoku.length == 0 || sudoku[0].length == 0
+                || sudoku.length != sudoku[0].length) {
             throw new IllegalArgumentException("The sudoku must have an equal number of rows and columns that " +
                     "is greater than 0.");
         }
@@ -25,6 +27,9 @@ public class Grid {
         rowSets = new ArrayList<>(n);
         columnSets = new ArrayList<>(n);
         sectionSets = new ArrayList<>(n);
+
+        // initialize n
+        this.n = n;
 
         // initialize all of the hash sets
         for (int i = 0; i < n; i++) {
@@ -95,12 +100,7 @@ public class Grid {
      * @return the section number
      */
     private int toSectionNum(int row, int column) {
-        return row / 3 + 3 * (column / 3);
-    }
-
-    public static void main(String[] args) {
-        Grid g = new Grid(new int[][] {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}}, 3);
-        boolean b = g.isValidPlacement(1, 0, 0);
-        System.out.println(b);
+        int root = (int) Math.sqrt(n);
+        return row / root + root * (column / root);
     }
 }

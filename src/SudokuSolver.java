@@ -1,4 +1,4 @@
-
+import java.util.HashSet;
 
 /**
  * A class containing static methods for solving a sudoku puzzle
@@ -15,18 +15,137 @@ public class SudokuSolver {
         // create a Grid to store the numbers of the sudoku for fast lookup times
         Grid grid = new Grid(sudoku, n);
 
+        // start the recursive backtracking algorithm
+        return backtrack(sudoku, grid, n, 0, 0);
+    }
+
+    /**
+     * This method implements recursive backtracking in order to solve the sudoku
+     * Time Complexity: O(9^(n*n)) where n is the number of rows and columns
+     * Space complexity: O(n*n) where n is the number of rows and columns
+     * @param sudoku the sudoku to be solved
+     * @param grid the grid that keeps track of the numbers that have been placed
+     * @param n the height and width of the sudoku which is nxn
+     * @param row the current row number
+     * @param column the current column number
+     * @return whether the sudoku can be solved given the numbers that are currently in it
+     */
+    public static boolean backtrack(int[][] sudoku, Grid grid, int n, int row, int column) {
+        // cases where numbers do not need to be checked for this row and column
+        if (column >= n) return backtrack(sudoku, grid, n, row+1, 0);
+        if (row >= n) return true;
+        if (sudoku[row][column] != 0) return backtrack(sudoku, grid, n, row, column+1);
+
+        // loop over the potential numbers 1-n
+        for (int i = 1; i <= n; i++) {
+            if (grid.isValidPlacement(i, row, column)) {
+
+                // try adding this number to the grid
+                grid.add(i, row, column);
+                sudoku[row][column] = i;
+
+                // check if we can continue with this placement
+                // if we can, then return true
+                if (backtrack(sudoku, grid, n, row, column+1)) return true;
+                // if we cannot, then remove this number from the sudoku and grid and try the
+                // next number in the next loop iteration
+                else {
+                    grid.remove(i, row, column);
+                    sudoku[row][column] = 0;
+                }
+            }
+        }
         return false;
+    }
+
+    /**
+     * Uses HashSets to verify that the each row, column, and section contains no duplicates
+     * Time Complexity: O(n*n) where n is the number of rows and columns
+     * Space Complexity: O(n) where n is the number of rows and columns
+     * @param sudoku the sudoku to be verified
+     * @param n the number of rows and columns in the sudoku
+     * @return whether the solution is valid
+     */
+    public static boolean verifySudoku(int[][] sudoku, int n) {
+        // make sure the board sie is valid
+        if (n != 4 && n != 9 && n != 16) return false;
+
+        // initialize the hash sets
+        HashSet<Integer> rowSet = new HashSet<>();
+        HashSet<Integer> columnSet = new HashSet<>();
+        HashSet<Integer> sectionSet = new HashSet<>();
+
+        // check the rows and columns to make sure there are no duplicates
+        for (int i = 0; i < n; i++) {
+            rowSet.clear();
+            columnSet.clear();
+            for (int j = 0; j < n; j++) {
+                if (rowSet.contains(sudoku[i][j])) return false;
+                if (columnSet.contains(sudoku[j][i])) return false;
+                rowSet.add(sudoku[i][j]);
+                columnSet.add(sudoku[j][i]);
+            }
+        }
+
+        // check the sections to make sure there are no duplicates
+        int root = (int) Math.sqrt(n);
+        for (int i = 0; i < root; i++) {
+            for (int j = 0; j < root; j++) {
+                sectionSet.clear();
+                int startA = root * i;
+                int startB = root * j;
+                for (int a = 0; a < root; a++) {
+                    for (int b = 0; b < root; b++) {
+                        if (sectionSet.contains(sudoku[startA+a][startB+b])) return false;
+                        sectionSet.add(sudoku[startA+a][startB+b]);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Prints the sudoku
+     * @param sudoku the sudoku to be printed
+     * @param n the number of rows and columns in the sudoku
+     */
+    public static void displaySudoku(int[][] sudoku, int n) {
+        // print the top line of dashes
+        for (int i = 0; i < 3 * n + 2; i++) {
+            System.out.print('-');
+        }
+        System.out.print('\n');
+
+        // print each row of the sudoku surrounded by pipes
+        for (int i = 0; i < n; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < n; j++) {
+                if (j < n - 1) System.out.print(sudoku[i][j] + "  ");
+                else System.out.print(sudoku[i][j] + " |\n");
+            }
+        }
+
+        // print the bottom line of dashes
+        for (int i = 0; i < 3 * n + 2; i++) {
+            System.out.print('-');
+        }
+        System.out.print("\n");
     }
 
     public static void main(String[] args) {
 
-        // A zero on a sudoku represents an empty spot
+        // the sudoku dimensions
+        int n = 9;
+
+        // ** A zero on a sudoku represents an empty spot **
 
         // initialize an easy test sudoku
         // https://www.websudoku.com/?level=1&set_id=2220966754
         int[][] easyTestSudoku = {
                 {0, 7, 4, 0, 6, 0, 2, 1, 0},
-                {0, 3, 6, 5, 1, 3, 0, 9, 0},
+                {0, 2, 6, 5, 1, 3, 0, 9, 0},
                 {9, 0, 0, 0, 7, 0, 0, 8, 0},
                 {0, 0, 0, 1, 0, 0, 0, 0, 0},
                 {0, 3, 0, 9, 8, 2, 0, 4, 0},
@@ -50,5 +169,28 @@ public class SudokuSolver {
                 {0, 4, 0, 0, 0, 0, 0, 0, 5}
         };
 
+        // display the initial easy sudoku
+        System.out.println("\nEasy test sudoku before solving:");
+        displaySudoku(easyTestSudoku, n);
+
+        // display the solved easy sudoku (if possible)
+        System.out.println("\nEasy test sudoku after solving:");
+        if (solve(easyTestSudoku, n)) displaySudoku(easyTestSudoku, n);
+        else System.out.println("\nThis sudoku cannot be solved.");
+
+        if (verifySudoku(easyTestSudoku, n)) System.out.println("Solution Verified ✅\n\n");
+        else System.out.println("Incorrect Solution ❌\n\n");
+
+        // display the initial hard sudoku
+        System.out.println("Hard test sudoku before solving: ");
+        displaySudoku(hardTestSudoku, n);
+
+        // display the solved hard sudoku (if possible)
+        System.out.println("\nHard test sudoku after solving:");
+        if (solve(hardTestSudoku, n)) displaySudoku(hardTestSudoku, n);
+        else System.out.println("\nTHis sudoku cannot be solved.");
+
+        if (verifySudoku(hardTestSudoku, n)) System.out.println("Solution Verified ✅\n\n");
+        else System.out.println("Incorrect Solution ❌\n\n");
     }
 }
