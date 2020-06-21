@@ -52,11 +52,11 @@ public class SudokuSolver {
      * @return whether the sudoku was successfully solved
      */
     public static boolean solve(int[][] sudoku, int n) {
-        // create a Grid to store the numbers of the sudoku for fast lookup times
-        HashGrid grid = new HashGrid(sudoku, n);
+        // create a HashGrid to store the numbers of the sudoku for fast lookup times
+        HashGrid hGrid = new HashGrid(sudoku, n);
 
         // start the recursive backtracking algorithm
-        return backtrack(sudoku, grid, n, 0, 0);
+        return backtrack(sudoku, hGrid, n, 0, 0);
     }
 
     /**
@@ -64,36 +64,44 @@ public class SudokuSolver {
      * Time Complexity: O(9^(n*n)) where n is the number of rows and columns
      * Space complexity: O(n*n) where n is the number of rows and columns
      * @param sudoku the sudoku to be solved
-     * @param grid the grid that keeps track of the numbers that have been placed
+     * @param hGrid the hash grid that keeps track of the numbers that have been placed
      * @param n the height and width of the sudoku which is nxn
      * @param row the current row number
      * @param column the current column number
      * @return whether the sudoku can be solved given the numbers that are currently in it
      */
-    public static boolean backtrack(int[][] sudoku, HashGrid grid, int n, int row, int column) {
+    private static boolean backtrack(int[][] sudoku, HashGrid hGrid, int n, int row, int column) {
         // cases where numbers do not need to be checked for this row and column
-        if (column >= n) return backtrack(sudoku, grid, n, row+1, 0);
+        if (column >= n) return backtrack(sudoku, hGrid, n, row+1, 0);
         if (row >= n) return true;
-        if (sudoku[row][column] != 0) return backtrack(sudoku, grid, n, row, column+1);
+        if (sudoku[row][column] != 0) return backtrack(sudoku, hGrid, n, row, column+1);
 
         // loop over the potential numbers 1-n
         for (int i = 1; i <= n; i++) {
-            if (grid.isValidPlacement(i, row, column)) {
+            if (hGrid.isValidPlacement(i, row, column)) {
                 // try adding this number to the grid
-                grid.add(i, row, column);
+                hGrid.add(i, row, column);
                 sudoku[row][column] = i;
 
                 // check if we can continue with this placement
                 // if we can, then return true
-                if (backtrack(sudoku, grid, n, row, column+1)) return true;
+                if (backtrack(sudoku, hGrid, n, row, column+1)) return true;
                 // if we cannot, then remove this number from the sudoku and grid and try the
                 // next number in the next loop iteration
                 else {
-                    grid.remove(i, row, column);
+                    hGrid.remove(i, row, column);
                     sudoku[row][column] = 0;
                 }
             }
         }
+        return false;
+    }
+
+    public static void guiSolve(SudokuGrid sGrid, int[][] sudoku, int n) {
+
+    }
+
+    private static boolean guiBacktrack(SudokuGrid sGrid, int[][] sudoku, HashGrid hGrid, int n, int row, int column) {
         return false;
     }
 
