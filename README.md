@@ -1,7 +1,7 @@
 # Sudoku Solver
 
-A Java Sudoku application that uses recursive backtracking to solve a Sudoku. Includes a GUI that can be used to do a 
-Sudoku and also includes a visual demonstration of the recursive backtracking algorithm in action. 
+A Sudoku application built using Java that implements recursive backtracking to solve a Sudoku. Includes a GUI that 
+can be used to do a Sudoku and also includes a visual demonstration of the recursive backtracking algorithm in action. 
 
 ### Running Sudoku Solver
 
