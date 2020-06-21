@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * A class to store information of a sudoku grid in HashSets in order to utilize constant lookup time.
+ * Stores information of a sudoku grid in HashSets in order to utilize constant lookup time
  */
-public class Grid {
+public class HashGrid {
 
     /**
      * ArrayLists of the hashsets that will represent each row, column, and section
@@ -14,7 +14,7 @@ public class Grid {
     private final ArrayList<HashSet<Integer>> sectionSets;
     private final int n;
 
-    public Grid(int[][] sudoku, int n) {
+    public HashGrid(int[][] sudoku, int n) {
 
         // make sure that the arguments passed in are in compliance with valid sudoku format 4x4 9x9 or 16x16
         if (!(n == 4 || n == 9 || n == 16) || sudoku.length == 0 || sudoku[0].length == 0

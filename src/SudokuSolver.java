@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -7,13 +8,52 @@ import java.util.HashSet;
 public class SudokuSolver {
 
     /**
+     * dimensions
+     */
+    public static final int N = 9;
+
+    // ** A zero on a sudoku represents an empty spot **
+
+    /**
+     * initialize an easy test sudoku
+     * https://www.websudoku.com/?level=1&set_id=2220966754
+     */
+    public static final int[][] EASY_TEST_SUDOKU = {
+            {0, 7, 4, 0, 6, 0, 2, 1, 0},
+            {0, 2, 6, 5, 1, 3, 0, 9, 0},
+            {9, 0, 0, 0, 7, 0, 0, 8, 0},
+            {0, 0, 0, 1, 0, 0, 0, 0, 0},
+            {0, 3, 0, 9, 8, 2, 0, 4, 0},
+            {0, 0, 0, 0, 0, 7, 0, 0, 0},
+            {0, 8, 0, 0, 5, 0, 0, 0, 9},
+            {0, 6, 0, 3, 2, 8, 5, 7, 0},
+            {0, 5, 2, 0, 9, 0, 4, 6, 0}
+    };
+
+    /**
+     * initialize a hard test sudoku
+     * https://www.websudoku.com/?level=4&set_id=4884744131
+     */
+    public static final int[][] HARD_TEST_SUDOKU = {
+            {6, 0, 0, 0, 0, 0, 0, 3, 0},
+            {3, 0, 0, 1, 0, 0, 4, 0, 0},
+            {0, 2, 5, 0, 0, 3, 0, 6, 0},
+            {0, 0, 0, 9, 0, 2, 0, 0, 0},
+            {1, 0, 7, 0, 0, 0, 6, 0, 4},
+            {0, 0, 0, 7, 0, 1, 0, 0, 0},
+            {0, 6, 0, 3, 0, 0, 8, 1, 0},
+            {0, 0, 8, 0, 0, 7, 0, 0, 6},
+            {0, 4, 0, 0, 0, 0, 0, 0, 5}
+    };
+
+    /**
      * Attempts to solve the sudoku by modifying the input sudoku array
      * @param sudoku and array representing the sudoku to be solved
      * @return whether the sudoku was successfully solved
      */
     public static boolean solve(int[][] sudoku, int n) {
         // create a Grid to store the numbers of the sudoku for fast lookup times
-        Grid grid = new Grid(sudoku, n);
+        HashGrid grid = new HashGrid(sudoku, n);
 
         // start the recursive backtracking algorithm
         return backtrack(sudoku, grid, n, 0, 0);
@@ -30,7 +70,7 @@ public class SudokuSolver {
      * @param column the current column number
      * @return whether the sudoku can be solved given the numbers that are currently in it
      */
-    public static boolean backtrack(int[][] sudoku, Grid grid, int n, int row, int column) {
+    public static boolean backtrack(int[][] sudoku, HashGrid grid, int n, int row, int column) {
         // cases where numbers do not need to be checked for this row and column
         if (column >= n) return backtrack(sudoku, grid, n, row+1, 0);
         if (row >= n) return true;
@@ -39,7 +79,6 @@ public class SudokuSolver {
         // loop over the potential numbers 1-n
         for (int i = 1; i <= n; i++) {
             if (grid.isValidPlacement(i, row, column)) {
-
                 // try adding this number to the grid
                 grid.add(i, row, column);
                 sudoku[row][column] = i;
@@ -135,62 +174,34 @@ public class SudokuSolver {
     }
 
     public static void main(String[] args) {
-
-        // the sudoku dimensions
-        int n = 9;
-
-        // ** A zero on a sudoku represents an empty spot **
-
-        // initialize an easy test sudoku
-        // https://www.websudoku.com/?level=1&set_id=2220966754
-        int[][] easyTestSudoku = {
-                {0, 7, 4, 0, 6, 0, 2, 1, 0},
-                {0, 2, 6, 5, 1, 3, 0, 9, 0},
-                {9, 0, 0, 0, 7, 0, 0, 8, 0},
-                {0, 0, 0, 1, 0, 0, 0, 0, 0},
-                {0, 3, 0, 9, 8, 2, 0, 4, 0},
-                {0, 0, 0, 0, 0, 7, 0, 0, 0},
-                {0, 8, 0, 0, 5, 0, 0, 0, 9},
-                {0, 6, 0, 3, 2, 8, 5, 7, 0},
-                {0, 5, 2, 0, 9, 0, 4, 6, 0}
-        };
-
-        // initialize a hard test sudoku
-        // https://www.websudoku.com/?level=4&set_id=4884744131
-        int[][] hardTestSudoku = {
-                {6, 0, 0, 0, 0, 0, 0, 3, 0},
-                {3, 0, 0, 1, 0, 0, 4, 0, 0},
-                {0, 2, 5, 0, 0, 3, 0, 6, 0},
-                {0, 0, 0, 9, 0, 2, 0, 0, 0},
-                {1, 0, 7, 0, 0, 0, 6, 0, 4},
-                {0, 0, 0, 7, 0, 1, 0, 0, 0},
-                {0, 6, 0, 3, 0, 0, 8, 1, 0},
-                {0, 0, 8, 0, 0, 7, 0, 0, 6},
-                {0, 4, 0, 0, 0, 0, 0, 0, 5}
-        };
-
         // display the initial easy sudoku
         System.out.println("\nEasy test sudoku before solving:");
-        displaySudoku(easyTestSudoku, n);
+        displaySudoku(EASY_TEST_SUDOKU, N);
+
+        // create a copy of the easy test sudoku that will be solved
+        int[][] easyToSolve = Arrays.stream(EASY_TEST_SUDOKU).map(int[]::clone).toArray(int[][]::new);
 
         // display the solved easy sudoku (if possible)
         System.out.println("\nEasy test sudoku after solving:");
-        if (solve(easyTestSudoku, n)) displaySudoku(easyTestSudoku, n);
+        if (solve(easyToSolve, N)) displaySudoku(easyToSolve, N);
         else System.out.println("\nThis sudoku cannot be solved.");
 
-        if (verifySudoku(easyTestSudoku, n)) System.out.println("Solution Verified ✅\n\n");
+        if (verifySudoku(easyToSolve, N)) System.out.println("Solution Verified ✅\n\n");
         else System.out.println("Incorrect Solution ❌\n\n");
 
         // display the initial hard sudoku
         System.out.println("Hard test sudoku before solving: ");
-        displaySudoku(hardTestSudoku, n);
+        displaySudoku(HARD_TEST_SUDOKU, N);
+
+        // create a copy of the hard test sudoku that will be solved
+        int[][] hardToSolve = Arrays.stream(HARD_TEST_SUDOKU).map(int[]::clone).toArray(int[][]::new);
 
         // display the solved hard sudoku (if possible)
         System.out.println("\nHard test sudoku after solving:");
-        if (solve(hardTestSudoku, n)) displaySudoku(hardTestSudoku, n);
+        if (solve(hardToSolve, N)) displaySudoku(hardToSolve, N);
         else System.out.println("\nTHis sudoku cannot be solved.");
 
-        if (verifySudoku(hardTestSudoku, n)) System.out.println("Solution Verified ✅\n\n");
+        if (verifySudoku(hardToSolve, N)) System.out.println("Solution Verified ✅\n\n");
         else System.out.println("Incorrect Solution ❌\n\n");
     }
 }
