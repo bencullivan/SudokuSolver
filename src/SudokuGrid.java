@@ -155,6 +155,9 @@ public class SudokuGrid extends JPanel {
         label.addKeyListener(createKeyListener());
     }
 
+    /**
+     * @return a mouse listener that is called when the user presses on a square of the sudoku
+     */
     private MouseListener createMouseListener() {
         return new MouseListener() {
             @Override
@@ -185,6 +188,9 @@ public class SudokuGrid extends JPanel {
         };
     }
 
+    /**
+     * @return a key listener that is called when the user types a key (only if the user has selected a sudoku square)
+     */
     private KeyListener createKeyListener() {
         return new KeyListener() {
             @Override

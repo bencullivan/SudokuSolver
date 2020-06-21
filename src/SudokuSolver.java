@@ -97,10 +97,27 @@ public class SudokuSolver {
         return false;
     }
 
+    /**
+     * Attempts to solve the sudoku by modifying the input sudoku array
+     * @param sGrid the sudoku grid of labels
+     * @param sudoku an array representing the sudoku to be solved
+     * @param n the number of rows and columns in the sudoku
+     */
     public static void guiSolve(SudokuGrid sGrid, int[][] sudoku, int n) {
 
     }
 
+    /**
+     * This method implements the same recursive backtracking algorithm,
+     * however it also displays its progress on the sudoku grid
+     * @param sGrid
+     * @param sudoku
+     * @param hGrid
+     * @param n
+     * @param row
+     * @param column
+     * @return
+     */
     private static boolean guiBacktrack(SudokuGrid sGrid, int[][] sudoku, HashGrid hGrid, int n, int row, int column) {
         return false;
     }
