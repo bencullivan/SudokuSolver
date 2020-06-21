@@ -83,6 +83,7 @@ public class SudokuGrid extends JPanel {
                         // create a label
                         PositionLabel label = new PositionLabel(startA+a, startB+b);
                         label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                        label.setOpaque(true);
 
                         // if this position contains one of the provided numbers, add it to the grid
                         if (unsolved[startA+a][startB+b] != 0) {
