@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 /**
  * Subclass of JFrame
@@ -139,8 +138,7 @@ public class SudokuGame extends JFrame {
      * @return the action listener that is called when the user clicks solve
      */
     private ActionListener createSolveListener() {
-        return e -> SudokuSolver.guiSolve(mainGrid,
-                Arrays.stream(mainGrid.getUnsolved()).map(int[]::clone).toArray(int[][]::new), N);
+        return e -> mainGrid.solve();
     }
 
     /**
@@ -164,8 +162,7 @@ public class SudokuGame extends JFrame {
         if (numStrikes >= 5) {
             numStrikes = 0;
             strikeLabel.setText(STRIKES_STRING + numStrikes);
-            SudokuSolver.guiSolve(mainGrid,
-                    Arrays.stream(mainGrid.getUnsolved()).map(int[]::clone).toArray(int[][]::new), N);
+            mainGrid.solve();
         }
         // add a strike
         else {

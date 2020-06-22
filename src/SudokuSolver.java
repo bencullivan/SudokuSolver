@@ -1,5 +1,7 @@
+import java.awt.*;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Timer;
 
 /**
  * A class containing static methods for solving a sudoku puzzle
@@ -8,9 +10,9 @@ import java.util.HashSet;
 public class SudokuSolver {
 
     /**
-     * dimensions
+     * private constants
      */
-    public static final int N = 9;
+    private static final int N = 9;               // the dimensions of the sudoku
 
     // ** A zero on a sudoku represents an empty spot **
 
@@ -52,7 +54,7 @@ public class SudokuSolver {
      * @return whether the sudoku was successfully solved
      */
     public static boolean solve(int[][] sudoku, int n) {
-        // create a HashGrid to store the numbers of the sudoku for fast lookup times
+        // create a HashGrid to store the numbers of the sudoku for constant lookup times
         HashGrid hGrid = new HashGrid(sudoku, n);
 
         // start the recursive backtracking algorithm
@@ -94,31 +96,6 @@ public class SudokuSolver {
                 }
             }
         }
-        return false;
-    }
-
-    /**
-     * Attempts to solve the sudoku by modifying the input sudoku array
-     * @param sGrid the sudoku grid of labels
-     * @param sudoku an array representing the sudoku to be solved
-     * @param n the number of rows and columns in the sudoku
-     */
-    public static void guiSolve(SudokuGrid sGrid, int[][] sudoku, int n) {
-
-    }
-
-    /**
-     * This method implements the same recursive backtracking algorithm,
-     * however it also displays its progress on the sudoku grid
-     * @param sGrid
-     * @param sudoku
-     * @param hGrid
-     * @param n
-     * @param row
-     * @param column
-     * @return
-     */
-    private static boolean guiBacktrack(SudokuGrid sGrid, int[][] sudoku, HashGrid hGrid, int n, int row, int column) {
         return false;
     }
 
