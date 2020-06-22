@@ -49,7 +49,7 @@ public class SudokuGame extends JFrame {
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         // add a sudoku grid to the main panel
-        mainGrid = new SudokuGrid(this, N, ROOT, SudokuSolver.EASY_TEST_SUDOKU);
+        mainGrid = new SudokuGrid(this, N, ROOT, SudokuSolver.HARD_TEST_SUDOKU);
         mainPanel.add(mainGrid);
         // add the bottom panel to the main panel
         initBottomPanel();

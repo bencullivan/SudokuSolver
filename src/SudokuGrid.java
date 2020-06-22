@@ -22,7 +22,7 @@ public class SudokuGrid extends JPanel {
     private static final Font MAIN_FONT = new Font("SansSerif", Font.BOLD, 35);
     private static final Font SECONDARY_FONT = new Font("SansSerif", Font.BOLD, 15);
     private static final int DELAY = 2;
-    private static final Color BACKTRACK_COLOR = new Color(0, 240, 0);
+    private static final Color BACKGROUND_COLOR = new Color(238, 238, 238);
 
     private final PositionLabel[][] sudoku;
     private final int[][] unsolved;
@@ -111,11 +111,13 @@ public class SudokuGrid extends JPanel {
      * removes all numbers that have been input by the user
      */
     public void clearGrid() {
+        // stop the timer if it is running
+        if (timer != null && timer.isRunning()) timer.stop();
         // loop over the grid and clear all of the numbers that are not in the unsolved sudoku
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (unsolved[i][j] == 0) {
-                    sudoku[i][j].setBackground(Color.WHITE);
+                    sudoku[i][j].setBackground(BACKGROUND_COLOR);
                     sudoku[i][j].setText("");
                     sudoku[i][j].setFont(SECONDARY_FONT);
                     sudoku[i][j].setHorizontalAlignment(SwingConstants.RIGHT);
@@ -128,12 +130,12 @@ public class SudokuGrid extends JPanel {
     /**
      * removes all numbers that have been input by the user and sets the font to the main font
      */
-    public void clearGridSetFont() {
+    private void clearGridSetFont() {
         // loop over the grid and set the font of all the numbers that are not in the unsolved sudoku
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (unsolved[i][j] == 0) {
-                    sudoku[i][j].setBackground(Color.WHITE);
+                    sudoku[i][j].setBackground(BACKGROUND_COLOR);
                     sudoku[i][j].setText("");
                     sudoku[i][j].setFont(MAIN_FONT);
                     sudoku[i][j].setHorizontalAlignment(SwingConstants.CENTER);
@@ -199,6 +201,8 @@ public class SudokuGrid extends JPanel {
                 selected = (PositionLabel) e.getComponent();
                 // set the border of this label to show that it is selected
                 selected.setBorder(BorderFactory.createLineBorder(SELECTED_COLOR, 1));
+                // request focus so that this label can receive keyboard events
+                selected.requestFocus();
             }
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -222,6 +226,7 @@ public class SudokuGrid extends JPanel {
         return new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
+                System.out.println("typed");
                 // if they typed a number, set the text of this label
                 if (!e.isActionKey() && selected != null && numChars.contains(e.getKeyChar())) {
                     selected.setText(String.valueOf(e.getKeyChar()));
@@ -229,6 +234,7 @@ public class SudokuGrid extends JPanel {
             }
             @Override
             public void keyPressed(KeyEvent e) {
+                System.out.println("pressed");
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && selected != null && !selected.getText().equals("")) {
                     // get the number that is on the label
                     int guess = Integer.parseInt(selected.getText());
@@ -278,16 +284,6 @@ public class SudokuGrid extends JPanel {
         timer.start();
     }
 
-//    public void test() {
-//        if (index >= N) timer.stop();
-//        else {
-//            sudoku[0][index].setText("a");
-//            //sudoku[0][index].repaint();
-//        }
-//        index++;
-//        System.out.println("paint");
-//    }
-
     public void backtrack() {
         // if the stack is empty or we have solved the sudoku, stop the timer
         if (stack.empty() || index >= unfilled.size()) {
@@ -304,7 +300,7 @@ public class SudokuGrid extends JPanel {
             duplicate[row][column] = 0;
             hGrid.remove(current.getNum(), row, column);
             sudoku[row][column].setText("");
-            sudoku[row][column].setBackground(Color.WHITE);
+            sudoku[row][column].setBackground(BACKGROUND_COLOR);
             current.setAdded(false);
         }
 
@@ -314,7 +310,7 @@ public class SudokuGrid extends JPanel {
         // if the current's number is greater than 9, backtrack
         if (current.getNum() > 9) {
             sudoku[row][column].setText("");
-            sudoku[row][column].setBackground(Color.WHITE);
+            sudoku[row][column].setBackground(BACKGROUND_COLOR);
             index--;
             stack.pop();
             return;
