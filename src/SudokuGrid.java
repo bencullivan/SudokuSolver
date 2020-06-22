@@ -84,19 +84,19 @@ public class SudokuGrid extends JPanel {
                 for (int a = 0; a < ROOT; a++) {
                     for (int b = 0; b < ROOT; b++) {
                         // create a label
-                        PositionLabel label = new PositionLabel(startA+a, startB+b);
+                        PositionLabel label = new PositionLabel(startA + a, startB + b);
                         label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
                         label.setOpaque(true);
 
                         // if this position contains one of the provided numbers, add it to the grid
-                        if (unsolved[startA+a][startB+b] != 0) {
-                            initNonSelectableLabel(label, String.valueOf(unsolved[startA+a][startB+b]));
+                        if (unsolved[startA + a][startB + b] != 0) {
+                            initNonSelectableLabel(label, String.valueOf(unsolved[startA + a][startB + b]));
                         } else {
                             initSelectableLabel(label);
                         }
 
                         // add the label to the sudoku grid
-                        sudoku[startA+a][startB+b] = label;
+                        sudoku[startA + a][startB + b] = label;
                         // add the label to the section panel
                         section.add(label).setLocation(a, b);
                     }
@@ -147,8 +147,9 @@ public class SudokuGrid extends JPanel {
 
     /**
      * Initializes each label that contains a number in the unsolved sudoku
+     *
      * @param label the label being initialized
-     * @param text the number to be placed on the label
+     * @param text  the number to be placed on the label
      */
     private void initNonSelectableLabel(PositionLabel label, String text) {
         label.setText(text);
@@ -160,6 +161,7 @@ public class SudokuGrid extends JPanel {
 
     /**
      * initializes each label that does not contain a number in the unsolved sudoku
+     *
      * @param label the label being initialized
      */
     private void initSelectableLabel(PositionLabel label) {
@@ -179,7 +181,7 @@ public class SudokuGrid extends JPanel {
         unfilled = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (unsolved[i][j] == 0) unfilled.add(new int[] {i, j});
+                if (unsolved[i][j] == 0) unfilled.add(new int[]{i, j});
             }
         }
     }
@@ -193,6 +195,7 @@ public class SudokuGrid extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 // do nothing
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
                 // if there is an element that is already selected, restore its border to the normal border
@@ -204,14 +207,17 @@ public class SudokuGrid extends JPanel {
                 // request focus so that this label can receive keyboard events
                 selected.requestFocus();
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 // do nothing
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 // do nothing
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 // do nothing
@@ -232,6 +238,7 @@ public class SudokuGrid extends JPanel {
                     selected.setText(String.valueOf(e.getKeyChar()));
                 }
             }
+
             @Override
             public void keyPressed(KeyEvent e) {
                 System.out.println("pressed");
@@ -258,6 +265,7 @@ public class SudokuGrid extends JPanel {
                     selected.setFont(SECONDARY_FONT);
                 }
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
                 // do nothing
