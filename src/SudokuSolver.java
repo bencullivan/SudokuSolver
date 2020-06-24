@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Timer;
 
 /**
  * A class containing static methods for solving a sudoku puzzle

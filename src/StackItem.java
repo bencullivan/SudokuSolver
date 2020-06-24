@@ -1,3 +1,7 @@
+/**
+ * model to be stored in the stack
+ * @author Ben Cullivan
+ */
 public class StackItem {
 
     private final int row;
