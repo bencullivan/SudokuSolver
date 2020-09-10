@@ -15,3 +15,7 @@ not want to use the GUI, run src/SudokuSolver. If you want to use the GUI, run s
 Click on a spot on the sudoku in order to activate it. Then type a number to mark the spot with that number. 
 If you want to enter that number to the grid, press enter. To delete a number, click on the spot in the grid where it is 
 located and press backspace (delete on mac). To clear the grid, click "clear". At any point if you want to see the solution, click "solve" and witness the backtracking algorithm in progress. 
+
+### Note
+
+You can replace the two sudoku puzzles I have included with any valid sudoku represented in 2D array format.
